@@ -6,6 +6,7 @@ from streamlit_option_menu import option_menu
 from datetime import datetime
 import matplotlib.pyplot as plt
 import os
+import gdown
 from openai import OpenAI
 
 
@@ -21,12 +22,20 @@ st.set_page_config(
 client = OpenAI(api_key=st.secrets['OPENAI_API_KEY'])
 
 
+# ID file Googel Drive
+file_id = '1eACQIHOn3oS96V8rHzN6VlMuKtNX5raz'
+
+# URL Google drive untuk diunduh
+drive_url = f'https://drive.google.com/uc?id={file_id}'
 
 # Fungsi untuk memuat data dari database atau file CSV
 @st.cache_data
 def load_data():
-    file_path = './data/data_bersih.csv'
     try:
+        # Download file CSV
+        file_path = 'data_bersih.csv'  
+        gdown.download(drive_url, file_path, quiet=False)
+        # Baca file CCSV
         df = pd.read_csv(file_path,  low_memory=False)
         # Konversi tanggal ke tipe datetime
         df['tanggal_berangkat'] = pd.to_datetime(df['tanggal_berangkat'], errors='coerce')
